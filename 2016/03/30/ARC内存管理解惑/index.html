@@ -40,7 +40,7 @@
 		
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
-				<h2 class="blog-motto"></h2>
+				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
@@ -155,6 +155,10 @@
 </nav>
 
 	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/30/ARC内存管理解惑/" data-title="ARC内存管理解惑" data-url="http://blog.lxf.pw/2016/03/30/ARC内存管理解惑/"></div>
+</section>
+
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
@@ -229,14 +233,6 @@
 			
 		
 			
-				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
 			
 		
@@ -245,15 +241,15 @@
 			
 		
 			
+				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
 			
 		
 			
@@ -269,16 +265,20 @@
 			
 		
 			
-				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 		</ul>
 </div>
 
-
-  <div class="rsspart">
-	<a href="undefined" target="_blank" title="rss">RSS</a>
-</div>
 
 </aside>
 </div>
@@ -424,6 +424,18 @@ $(document).ready(function(){
 
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"busyluo"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
 
 
 
@@ -472,6 +484,35 @@ $(document).ready(function(){
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <!-- MathJax End -->
