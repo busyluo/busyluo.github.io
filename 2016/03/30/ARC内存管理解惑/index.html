@@ -1,0 +1,496 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ARC内存管理解惑 | Busyluo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Busyluo">
+    
+
+    
+    <meta name="description" content="自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARC内存管理解惑">
+<meta property="og:url" content="http://blog.lxf.pw/2016/03/30/ARC内存管理解惑/index.html">
+<meta property="og:site_name" content="Busyluo">
+<meta property="og:description" content="自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runt">
+<meta property="og:updated_time" content="2016-03-30T05:33:30.393Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ARC内存管理解惑">
+<meta name="twitter:description" content="自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runt">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/profile.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/profile.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
+				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:blog.lxf.pw">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/30/ARC内存管理解惑/" title="ARC内存管理解惑" itemprop="url">ARC内存管理解惑</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Busyluo" target="_blank" itemprop="author">Busyluo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-30T05:10:31.000Z" itemprop="datePublished"> 發表於 2016-03-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#strong-与-retain-，weak-与-assign"><span class="toc-number">1.</span> <span class="toc-text">strong 与 retain ，weak 与 assign</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用法总结"><span class="toc-number">2.</span> <span class="toc-text">用法总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接："><span class="toc-number">3.</span> <span class="toc-text">参考链接：</span></a></li></ol>
+		
+		</div>
+		
+		<p>自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runtime的C函数，以获得更高的效率。</p>
+<p>#property的作用<br>property为你的成员变量生成setter 和 getter, 在生成时，对于不同的变量，肯定会有不同的管理方式，因此不能一概而论。于是就需要使用atomic，nonatomic, strong, retain,  weak, assign, copy, readonly, readwrite来设置不同的变量的管理方式。其中atomic和nonatomic很好理解，决定变时是否是线程安全的。 readonly和readwrite也好理解，决定其可读写性。剩下的strong, retain,  weak, assign, copy和setter相关。</p>
+<p>需要注意的是，只有在通过<strong>点格式</strong>（obj.var）访问变量时，这些属性才会有效果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.name = something;  //正确的方式</span><br><span class="line">_name = something;		//会绕开setter, 直接访问变量</span><br></pre></td></tr></table></figure>
+<h1 id="strong-与-retain-，weak-与-assign"><a href="#strong-与-retain-，weak-与-assign" class="headerlink" title="strong 与 retain ，weak 与 assign"></a>strong 与 retain ，weak 与 assign</h1><p>strong和weak是ARC中新增的property属性，strong用于表明对对象的强引用，让其保持在内存中，直到不再指向它，其作用与retain完全相同，不过用意似乎更明确了。而weak 则不具备让对象保持在内存中的权利，当不再有strong指向weak指向的对象时，对象会被释放。</p>
+<p>assign 和 weak的区别在于，当weak指向的对象被释放时，weak会指向nil， 而assign则不会这么做。</p>
+<p>#copy 的作用<br>在使用copy时，setter传入的对象会被拷贝，并strong指向拷贝的对象。使用copy可以确保传入的对象不被外部修改。并且如果使用了copy，但对象没有被修改，会被优化成strong（未证实）。</p>
+<p>#ARC中的内存泄露<br>虽然ARC能自动管理内存，但不恰当的使用也会导致内存泄漏。最常见的就是循环强引用。主要有以下几种情况：</p>
+<ul>
+<li>Outlet类型指针</li>
+<li>委托</li>
+<li>block<br>Outlet和委托可以可以将其声明为weak来避免循环引用。<br>对于block,可以使用@weakify 宏：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@weakify(self);  </span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">      @strongify(self);</span><br><span class="line">      [self doSomething];</span><br><span class="line">      [self doOtherThing];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="用法总结"><a href="#用法总结" class="headerlink" title="用法总结"></a>用法总结</h1><p>在ARC工程中，使用strong 来代替retain，对原始的C语言变量使用assign，对OC对象的弱引用使用weak，对防止被外部修改的对象使用copy，另外，当需要声明一个block变量时，也应该使用copy。</p>
+<h1 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h1><p><a href="http://stackoverflow.com/questions/8927727/objective-c-arc-strong-vs-retain-and-weak-vs-assign" target="_blank" rel="external">http://stackoverflow.com/questions/8927727/objective-c-arc-strong-vs-retain-and-weak-vs-assign</a><br><a href="http://stackoverflow.com/questions/9262535/explanation-of-strong-and-weak-storage-in-ios5/9262768#9262768" target="_blank" rel="external">http://stackoverflow.com/questions/9262535/explanation-of-strong-and-weak-storage-in-ios5/9262768#9262768</a><br><a href="http://stackoverflow.com/questions/387959/nsstring-property-copy-or-retain" target="_blank" rel="external">http://stackoverflow.com/questions/387959/nsstring-property-copy-or-retain</a> stackoverflow问答<br><a href="https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html" target="_blank" rel="external">https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html</a> Apple官方文档<br><a href="http://www.jianshu.com/p/633b6316d89b" target="_blank" rel="external">http://www.jianshu.com/p/633b6316d89b</a> iOS arc VS mrc学习笔记</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/ios/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/Objective-C/">Objective-C</a><a href="/tags/ARC/">ARC</a><a href="/tags/内存管理/">内存管理</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/30/知识点随记/" title="知识点随记">
+  <span>
+  知识点随记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/30/使用Nginx-转发-个人域名到csdn/"  title="使用Nginx 转发 个人域名到csdn">
+ <span>使用Nginx 转发 个人域名到csdn
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		
+		<a href="https://github.com/busyluo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:e@lxf.pw" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/linuxkernel/" title="Linux内核">Linux内核<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ios/" title="iOS">iOS<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/experience/" title="心得体会">心得体会<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/折腾/" title="折腾">折腾<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tools/" title="编程工具">编程工具<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/域名/" title="域名">域名<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存管理/" title="内存管理">内存管理<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="undefined" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Busyluo">Busyluo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

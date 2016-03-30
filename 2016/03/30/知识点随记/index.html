@@ -1,0 +1,567 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>知识点随记 | Busyluo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Busyluo">
+    
+
+    
+    <meta name="description" content="2015-07-21 11:30:02
+double 变量显示nan,  nan 表示 Not a num，0.0/0.0时会出现这种情况。
+
+2016-03-20 20:29:04
+
+私人密钥加密：使用相同的私密加密和解密。 
+公开密钥加密：需要发送密文的一方获得对方的公开密钥，接收方在收到密文后使用私钥解密。
+混合加密：使用公开密钥加密来发送私人密钥，之后的传输使用私人密钥加密。
+
+
+数字签名">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点随记">
+<meta property="og:url" content="http://blog.lxf.pw/2016/03/30/知识点随记/index.html">
+<meta property="og:site_name" content="Busyluo">
+<meta property="og:description" content="2015-07-21 11:30:02
+double 变量显示nan,  nan 表示 Not a num，0.0/0.0时会出现这种情况。
+
+2016-03-20 20:29:04
+
+私人密钥加密：使用相同的私密加密和解密。 
+公开密钥加密：需要发送密文的一方获得对方的公开密钥，接收方在收到密文后使用私钥解密。
+混合加密：使用公开密钥加密来发送私人密钥，之后的传输使用私人密钥加密。
+
+
+数字签名">
+<meta property="og:updated_time" content="2016-03-30T05:43:34.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="知识点随记">
+<meta name="twitter:description" content="2015-07-21 11:30:02
+double 变量显示nan,  nan 表示 Not a num，0.0/0.0时会出现这种情况。
+
+2016-03-20 20:29:04
+
+私人密钥加密：使用相同的私密加密和解密。 
+公开密钥加密：需要发送密文的一方获得对方的公开密钥，接收方在收到密文后使用私钥解密。
+混合加密：使用公开密钥加密来发送私人密钥，之后的传输使用私人密钥加密。
+
+
+数字签名">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/profile.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/profile.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
+				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:blog.lxf.pw">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/30/知识点随记/" title="知识点随记" itemprop="url">知识点随记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Busyluo" target="_blank" itemprop="author">Busyluo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-30T05:10:44.000Z" itemprop="datePublished"> 發表於 2016-03-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2015-07-21-11-30-02"><span class="toc-number">1.</span> <span class="toc-text">2015-07-21 11:30:02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-20-20-29-04"><span class="toc-number">2.</span> <span class="toc-text">2016-03-20 20:29:04</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-21-22-26-46"><span class="toc-number">3.</span> <span class="toc-text">2016-03-21 22:26:46</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-22-22-22-46"><span class="toc-number">4.</span> <span class="toc-text">2016-03-22 22:22:46</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-23-23-10-32"><span class="toc-number">5.</span> <span class="toc-text">2016-03-23 23:10:32</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-24-20-09-16"><span class="toc-number">6.</span> <span class="toc-text">2016-03-24 20:09:16</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-26-15-20-19"><span class="toc-number">7.</span> <span class="toc-text">2016-03-26 15:20:19</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-27-08-55-49"><span class="toc-number">8.</span> <span class="toc-text">2016-03-27 08:55:49</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-28-20-24-10"><span class="toc-number">9.</span> <span class="toc-text">2016-03-28 20:24:10</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-03-29-13-24-59"><span class="toc-number">10.</span> <span class="toc-text">2016-03-29 13:24:59</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="2015-07-21-11-30-02"><a href="#2015-07-21-11-30-02" class="headerlink" title="2015-07-21 11:30:02"></a>2015-07-21 11:30:02</h2><ol>
+<li>double 变量显示nan,  nan 表示 Not a num，0.0/0.0时会出现这种情况。</li>
+</ol>
+<h2 id="2016-03-20-20-29-04"><a href="#2016-03-20-20-29-04" class="headerlink" title="2016-03-20 20:29:04"></a>2016-03-20 20:29:04</h2><ol>
+<li><ul>
+<li>私人密钥加密：使用相同的私密加密和解密。 </li>
+<li>公开密钥加密：需要发送密文的一方获得对方的公开密钥，接收方在收到密文后使用私钥解密。</li>
+<li>混合加密：使用公开密钥加密来发送私人密钥，之后的传输使用私人密钥加密。</li>
+</ul>
+</li>
+<li><p>数字签名技术：发送者用自己的私钥对原文HASH值进行加密，并将原文和HASH值一起发送，接收者用发送者的公钥解密，并效验HASH值。此技术用来保证发送者的身份和内容的真实性。</p>
+</li>
+<li>HTTPS 是在HTTP与TCP层之间加了SSL。</li>
+</ol>
+<h2 id="2016-03-21-22-26-46"><a href="#2016-03-21-22-26-46" class="headerlink" title="2016-03-21 22:26:46"></a>2016-03-21 22:26:46</h2><ol>
+<li><ul>
+<li>iOS私有API是Apple没有公开的API， 可以通过class-dump获取header。</li>
+<li>使用私有API会导致App store审核失败。</li>
+<li>使用InHouse发布的App可以不用审核。</li>
+</ul>
+</li>
+<li>iOS逆向工程相关：<a href="http://www.zhihu.com/question/20317296" target="_blank" rel="external">http://www.zhihu.com/question/20317296</a></li>
+<li>cocoapods 安装：<a href="https://segmentfault.com/a/1190000003742397" target="_blank" rel="external">https://segmentfault.com/a/1190000003742397</a></li>
+<li>@weakify 与 @strongify <a href="http://devshen.github.io/2015/06/04/Why_you_should_start_using@weakify_and%20@strongify_macros/" target="_blank" rel="external">http://devshen.github.io/2015/06/04/Why_you_should_start_using@weakify_and%20@strongify_macros/</a></li>
+<li>prefix.pch 的作用</li>
+</ol>
+<h2 id="2016-03-22-22-22-46"><a href="#2016-03-22-22-22-46" class="headerlink" title="2016-03-22 22:22:46"></a>2016-03-22 22:22:46</h2><ol>
+<li>CocoaPods Podfile  语法：<a href="https://guides.cocoapods.org/using/the-podfile.html" target="_blank" rel="external">https://guides.cocoapods.org/using/the-podfile.html</a></li>
+</ol>
+<h2 id="2016-03-23-23-10-32"><a href="#2016-03-23-23-10-32" class="headerlink" title="2016-03-23 23:10:32"></a>2016-03-23 23:10:32</h2><ol>
+<li>UIView的Spring动画 ,让动画出现反复的效果：<a href="http://www.csdn.net/article/2015-07-03/2825122-ios-uiview-animation-2" target="_blank" rel="external">http://www.csdn.net/article/2015-07-03/2825122-ios-uiview-animation-2</a></li>
+<li>使用PDF格式的图片，不再需要区分x1,x2,x3   <a href="http://blog.csdn.net/cuibo1123/article/details/39486197/" target="_blank" rel="external">http://blog.csdn.net/cuibo1123/article/details/39486197/</a></li>
+<li>正确移除addObserverForName 的方法 ：<a href="http://www.jianshu.com/p/1788d15c570b" target="_blank" rel="external">http://www.jianshu.com/p/1788d15c570b</a></li>
+<li>了解RAC :<a href="http://www.jianshu.com/p/87ef6720a096" target="_blank" rel="external">http://www.jianshu.com/p/87ef6720a096</a></li>
+</ol>
+<h2 id="2016-03-24-20-09-16"><a href="#2016-03-24-20-09-16" class="headerlink" title="2016-03-24 20:09:16"></a>2016-03-24 20:09:16</h2><ol>
+<li>TabViewCell的重用机制 : <code>initWithStyle:reuseIdentifier:</code>创建一个Cell时，框架会将具有相同reuseIdentifier的放入一个队列。<code>dequeueReusableCellWithIdentifier</code>会返回一个已经移出屏幕的Cell实例(如果存在的话，不存时返回nil)，然后对返回的Cell赋予新的属性。</li>
+</ol>
+<h2 id="2016-03-26-15-20-19"><a href="#2016-03-26-15-20-19" class="headerlink" title="2016-03-26 15:20:19"></a>2016-03-26 15:20:19</h2><ol>
+<li>通过 Associated Objects 给OC 实例 添加变量：<a href="http://blog.leichunfeng.com/blog/2015/06/26/objective-c-associated-objects-implementation-principle/" target="_blank" rel="external">http://blog.leichunfeng.com/blog/2015/06/26/objective-c-associated-objects-implementation-principle/</a></li>
+</ol>
+<h2 id="2016-03-27-08-55-49"><a href="#2016-03-27-08-55-49" class="headerlink" title="2016-03-27 08:55:49"></a>2016-03-27 08:55:49</h2><ol>
+<li>xib 会被编译后生成nib，xib 的 x代表xml, 它的引入可以更好的适用于版本控制工具。</li>
+<li>ViewController的生命周期：<a href="http://blog.csdn.net/busyluo/article/details/50993477" target="_blank" rel="external">http://blog.csdn.net/busyluo/article/details/50993477</a></li>
+</ol>
+<h2 id="2016-03-28-20-24-10"><a href="#2016-03-28-20-24-10" class="headerlink" title="2016-03-28 20:24:10"></a>2016-03-28 20:24:10</h2><ol>
+<li>UIKit Dynamics 将2D物理引擎引入了人UIKit，实现逼真的物理效果。</li>
+<li>CoreAnimation或者UIView animations的区别。</li>
+<li>用ModalViewController时，最好在调用present的VC里设置代理，用于dismiss ModalVC，同时方便数据交互。</li>
+<li>发送代理消息，作以下检查：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(delegateMethod)]) &#123;</span><br><span class="line">    [self.delegate delegateMethod];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="2016-03-29-13-24-59"><a href="#2016-03-29-13-24-59" class="headerlink" title="2016-03-29 13:24:59"></a>2016-03-29 13:24:59</h2><ol>
+<li>ionic、phonegap、react native的区别。<a href="http://www.oschina.net/question/576444_2152963?fromerr=i9wlm3y9" target="_blank" rel="external">http://www.oschina.net/question/576444_2152963?fromerr=i9wlm3y9</a> <a href="https://www.zhihu.com/question/30394458/answer/48267458" target="_blank" rel="external">https://www.zhihu.com/question/30394458/answer/48267458</a></li>
+<li>各种present的区别：<a href="http://blog.csdn.net/sunshinexyj/article/details/8476248" target="_blank" rel="external">http://blog.csdn.net/sunshinexyj/article/details/8476248</a></li>
+<li>转场动画详解：<a href="http://www.cocoachina.com/ios/20160308/15605.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20160308/15605.html</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/experience/">心得体会</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/HTTPS/">HTTPS</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/30/ViewController的生命周期/" title="ViewController的生命周期">
+  <span>
+  ViewController的生命周期</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/30/ARC内存管理解惑/"  title="ARC内存管理解惑">
+ <span>ARC内存管理解惑
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		
+		<a href="https://github.com/busyluo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:e@lxf.pw" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/linuxkernel/" title="Linux内核">Linux内核<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ios/" title="iOS">iOS<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/experience/" title="心得体会">心得体会<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/折腾/" title="折腾">折腾<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tools/" title="编程工具">编程工具<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/域名/" title="域名">域名<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存管理/" title="内存管理">内存管理<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="undefined" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Busyluo">Busyluo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

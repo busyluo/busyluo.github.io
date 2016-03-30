@@ -1,0 +1,519 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>u-boot加载Linux过程 | Busyluo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Busyluo">
+    
+
+    
+    <meta name="description" content="之前学习完了u-boot的启动，本文主要讲u-boot为linux内核的运行做了哪些准备工作。总结u-boot的作用，主要就是初始化硬件设备、写入linux的启动参数以及加载linux内核。下面对这几个主要作用作说明。
+初始化(TQ210开发板)首先了解在u-boot启动前，BL0完成的工作：
+
+禁止看门狗
+初始化指令cache
+初始化栈、堆
+初始化块设备拷贝函数
+初始化PLL（ 锁相环）、设置系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="u-boot加载Linux过程">
+<meta property="og:url" content="http://blog.lxf.pw/2016/03/30/u-boot加载Linux过程/index.html">
+<meta property="og:site_name" content="Busyluo">
+<meta property="og:description" content="之前学习完了u-boot的启动，本文主要讲u-boot为linux内核的运行做了哪些准备工作。总结u-boot的作用，主要就是初始化硬件设备、写入linux的启动参数以及加载linux内核。下面对这几个主要作用作说明。
+初始化(TQ210开发板)首先了解在u-boot启动前，BL0完成的工作：
+
+禁止看门狗
+初始化指令cache
+初始化栈、堆
+初始化块设备拷贝函数
+初始化PLL（ 锁相环）、设置系">
+<meta property="og:updated_time" content="2016-03-30T05:28:21.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="u-boot加载Linux过程">
+<meta name="twitter:description" content="之前学习完了u-boot的启动，本文主要讲u-boot为linux内核的运行做了哪些准备工作。总结u-boot的作用，主要就是初始化硬件设备、写入linux的启动参数以及加载linux内核。下面对这几个主要作用作说明。
+初始化(TQ210开发板)首先了解在u-boot启动前，BL0完成的工作：
+
+禁止看门狗
+初始化指令cache
+初始化栈、堆
+初始化块设备拷贝函数
+初始化PLL（ 锁相环）、设置系">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/profile.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/profile.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
+				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:blog.lxf.pw">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/30/u-boot加载Linux过程/" title="u-boot加载Linux过程" itemprop="url">u-boot加载Linux过程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Busyluo" target="_blank" itemprop="author">Busyluo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-30T05:08:24.000Z" itemprop="datePublished"> 發表於 2016-03-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初始化-TQ210开发板"><span class="toc-number">1.</span> <span class="toc-text">初始化(TQ210开发板)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#写入linux启动参数"><span class="toc-number">2.</span> <span class="toc-text">写入linux启动参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#加载linux内核"><span class="toc-number">3.</span> <span class="toc-text">加载linux内核</span></a></li></ol>
+		
+		</div>
+		
+		<p>之前学习完了u-boot的启动，本文主要讲u-boot为linux内核的运行做了哪些准备工作。总结u-boot的作用，主要就是初始化硬件设备、写入linux的启动参数以及加载linux内核。下面对这几个主要作用作说明。</p>
+<h1 id="初始化-TQ210开发板"><a href="#初始化-TQ210开发板" class="headerlink" title="初始化(TQ210开发板)"></a>初始化(TQ210开发板)</h1><p>首先了解在u-boot启动前，BL0完成的工作：</p>
+<ol>
+<li>禁止看门狗</li>
+<li>初始化指令cache</li>
+<li>初始化栈、堆</li>
+<li>初始化块设备拷贝函数</li>
+<li>初始化PLL（ 锁相环）、设置系统时钟</li>
+<li>根据OM引脚配置，从指定的外部存储器拷贝BL1到内部SRAM</li>
+<li>校验BL1的校验和</li>
+</ol>
+<p>在BL1（u-boot-spl） 中初始化时钟、DRAM控制器。</p>
+<h1 id="写入linux启动参数"><a href="#写入linux启动参数" class="headerlink" title="写入linux启动参数"></a>写入linux启动参数</h1><p>u-boot给linux参数是通过将参数以约定的格式放在内存中，然后u-boot将这个存放这个参数的内存地址传递给linux内核。</p>
+<p>u-boot启动后，会自动执行其环境变量里bootcmd代表的命令，在执行这个命令前，可以添加一个延时，在这段时间内可以通过设定的按键来中止自动执行bootcmd，这个延时的长短由CONFIG_BOOTDELAY决定，但也可以设置环境变量来改变它（对于其它环境变量也是这样）。当CONFIG_BOOTDELAY等于0时，可以通过定义CONFIG_ZERO_BOOTDELAY_CHECK来中止自动执行过程，但按键必须在启动前按下。</p>
+<p>u-boot传递给linux的参数是通过bootargs来传递的，在执行bootm前必须设置好bootargs，然后在bootcmd里添加bootm命令。</p>
+<p>bootm的工作是根据bootargs写入参数并将linux内核拷贝到运行的位置。写入的格式参照《3.2.4 设置内核的启动参数》 章节和U-Boot与Linux内核的交互，写入的位置在内存的0-0x4000这个范围内，0x4000-0x8000存放的是内核页表，这些地址在内核中有相关的宏定义，这也是为什么内核的加载地址一般为0x<em>**</em>8000的原因。在参数写入完成后，将寄存器R0赋值为0,R1赋值为机器号, R2赋值为启动参数数据结构的首地址。</p>
+<h1 id="加载linux内核"><a href="#加载linux内核" class="headerlink" title="加载linux内核"></a>加载linux内核</h1><p>调用bootm命令时，需要传入一个参数，这个参数代表的是将内核放到什么地方，那从什么地方去读内核文件呢？是通过u-boot分区别表，简单的说就是u-boot指定一块存储空间为kernel分区，并把内核映像放到该分区里，加载的时候就直接从这里读取了，详细请看<a href="http://blog.sina.com.cn/s/blog_95268f5001013e50.html。" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_95268f5001013e50.html。</a></p>
+<p>找到内核映像（uImage）后，读取它的前0x40个字节，得到loadaddr 和entry point两个地址，这两个地址是在制作uImage时指定的，u-boot会对这几个地址作判断。最后跳转到linux处，将控制权移交给linux。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/linuxkernel/">Linux内核</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Uboot/">Uboot</a>
+  </div>
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/30/Git使用笔记/" title="Git使用笔记">
+  <span>
+  Git使用笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/03/30/S5PV210加载u-boot过程/"  title="S5PV210加载u-boot过程">
+ <span>S5PV210加载u-boot过程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		
+		<a href="https://github.com/busyluo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:e@lxf.pw" target="_blank" class="icon-email" title="Email Me"></a>
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/linuxkernel/" title="Linux内核">Linux内核<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ios/" title="iOS">iOS<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/experience/" title="心得体会">心得体会<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/折腾/" title="折腾">折腾<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tools/" title="编程工具">编程工具<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/域名/" title="域名">域名<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存管理/" title="内存管理">内存管理<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="undefined" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Busyluo">Busyluo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
