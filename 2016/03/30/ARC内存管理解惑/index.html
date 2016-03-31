@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://blog.lxf.pw/2016/03/30/ARC内存管理解惑/index.html">
 <meta property="og:site_name" content="Busyluo">
 <meta property="og:description" content="自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runt">
-<meta property="og:updated_time" content="2016-03-30T05:33:30.393Z">
+<meta property="og:updated_time" content="2016-03-31T00:51:06.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ARC内存管理解惑">
 <meta name="twitter:description" content="自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runt">
@@ -42,7 +42,7 @@
 				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
 				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -58,7 +58,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:blog.lxf.pw">
 					</form>
 					
@@ -81,27 +81,27 @@
 		<a href="/about" title="Busyluo" target="_blank" itemprop="author">Busyluo</a>
 		
   <p class="article-time">
-    <time datetime="2016-03-30T05:10:31.000Z" itemprop="datePublished"> 发表于 2016-03-30</time>
+    <time datetime="2016-03-30T05:10:31.000Z" itemprop="datePublished"> Published 2016-03-30</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#strong-与-retain-，weak-与-assign"><span class="toc-number">1.</span> <span class="toc-text">strong 与 retain ，weak 与 assign</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用法总结"><span class="toc-number">2.</span> <span class="toc-text">用法总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接："><span class="toc-number">3.</span> <span class="toc-text">参考链接：</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#property的作用"><span class="toc-number">1.</span> <span class="toc-text">property的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#strong-与-retain-，weak-与-assign"><span class="toc-number">2.</span> <span class="toc-text">strong 与 retain ，weak 与 assign</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#copy-的作用"><span class="toc-number">3.</span> <span class="toc-text">copy 的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ARC中的内存泄露"><span class="toc-number">4.</span> <span class="toc-text">ARC中的内存泄露</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#用法总结"><span class="toc-number">5.</span> <span class="toc-text">用法总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接："><span class="toc-number">6.</span> <span class="toc-text">参考链接：</span></a></li></ol>
 		
 		</div>
 		
 		<p>自动引用计数(ARC)是一个编译器特性，它提供了自动的objective - c对象的内存管理。ARC是通过在编译时添加代码来确保OC对象只在需要的时候存在。从概念上讲，它添加适当的内存管理调用，并且遵循手动引用计数的内存管理规范。因此，在使用ARC时，不用关心什么时候使用retain，release 和 autorelease，并且ARC也不是直接发送retain等OC消息，而是直接调用runtime的C函数，以获得更高的效率。</p>
-<p>#property的作用<br>property为你的成员变量生成setter 和 getter, 在生成时，对于不同的变量，肯定会有不同的管理方式，因此不能一概而论。于是就需要使用atomic，nonatomic, strong, retain,  weak, assign, copy, readonly, readwrite来设置不同的变量的管理方式。其中atomic和nonatomic很好理解，决定变时是否是线程安全的。 readonly和readwrite也好理解，决定其可读写性。剩下的strong, retain,  weak, assign, copy和setter相关。</p>
+<h1 id="property的作用"><a href="#property的作用" class="headerlink" title="property的作用"></a>property的作用</h1><p>property为你的成员变量生成setter 和 getter, 在生成时，对于不同的变量，肯定会有不同的管理方式，因此不能一概而论。于是就需要使用atomic，nonatomic, strong, retain,  weak, assign, copy, readonly, readwrite来设置不同的变量的管理方式。其中atomic和nonatomic很好理解，决定变时是否是线程安全的。 readonly和readwrite也好理解，决定其可读写性。剩下的strong, retain,  weak, assign, copy和setter相关。</p>
 <p>需要注意的是，只有在通过<strong>点格式</strong>（obj.var）访问变量时，这些属性才会有效果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.name = something;  //正确的方式</span><br><span class="line">_name = something;		//会绕开setter, 直接访问变量</span><br></pre></td></tr></table></figure>
 <h1 id="strong-与-retain-，weak-与-assign"><a href="#strong-与-retain-，weak-与-assign" class="headerlink" title="strong 与 retain ，weak 与 assign"></a>strong 与 retain ，weak 与 assign</h1><p>strong和weak是ARC中新增的property属性，strong用于表明对对象的强引用，让其保持在内存中，直到不再指向它，其作用与retain完全相同，不过用意似乎更明确了。而weak 则不具备让对象保持在内存中的权利，当不再有strong指向weak指向的对象时，对象会被释放。</p>
 <p>assign 和 weak的区别在于，当weak指向的对象被释放时，weak会指向nil， 而assign则不会这么做。</p>
-<p>#copy 的作用<br>在使用copy时，setter传入的对象会被拷贝，并strong指向拷贝的对象。使用copy可以确保传入的对象不被外部修改。并且如果使用了copy，但对象没有被修改，会被优化成strong（未证实）。</p>
-<p>#ARC中的内存泄露<br>虽然ARC能自动管理内存，但不恰当的使用也会导致内存泄漏。最常见的就是循环强引用。主要有以下几种情况：</p>
+<h1 id="copy-的作用"><a href="#copy-的作用" class="headerlink" title="copy 的作用"></a>copy 的作用</h1><p>在使用copy时，setter传入的对象会被拷贝，并strong指向拷贝的对象。使用copy可以确保传入的对象不被外部修改。并且如果使用了copy，但对象没有被修改，会被优化成strong（未证实）。</p>
+<h1 id="ARC中的内存泄露"><a href="#ARC中的内存泄露" class="headerlink" title="ARC中的内存泄露"></a>ARC中的内存泄露</h1><p>虽然ARC能自动管理内存，但不恰当的使用也会导致内存泄漏。最常见的就是循环强引用。主要有以下几种情况：</p>
 <ul>
 <li>Outlet类型指针</li>
 <li>委托</li>
@@ -161,10 +161,10 @@
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 <div id="authorInfo">
 	
@@ -192,7 +192,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -221,7 +221,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -230,10 +230,6 @@
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
 			
 		
 			
@@ -249,7 +245,15 @@
 			
 		
 			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>1</sup></a></li>
 			
 		
 			
@@ -265,15 +269,11 @@
 			
 		
 			
-				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/总结/" title="总结">总结<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -476,7 +476,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
