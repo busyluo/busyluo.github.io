@@ -41,7 +41,7 @@
 				<h1 class="site-name"><a href="/" title="Busyluo">Busyluo</a></h1>
 				<h2 class="blog-motto">Stay Hungry, Stay Foolish.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -57,7 +57,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:blog.lxf.pw">
 					</form>
 					
@@ -72,12 +72,13 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2016/03/30/第一篇/" title="第一篇" itemprop="url">
+    <a href="/2016/03/30/S5PV210加载u-boot过程/" title="S5PV210加载u-boot过程" itemprop="url">
   
-    <h1 itemprop="name">第一篇</h1>
+    <h1 itemprop="name">S5PV210加载u-boot过程</h1>
     
      
-           <p itemprop="description" >说弄一个博客已经说了好久了，就是一直都没有动起手来。以后会在这里记录学习过程中的心得和体会，一是为了方便以后查阅，二是为了和大家交流，有不对的地方望能够得到大家的指正。</p>
+           <p itemprop="description" >这里只对整体的加载逻辑进行梳理，不作详细说明，学习过程主要参考《嵌入式Linux学习笔记（基于S5PV210、TQ210）》。
+上电后最先运行的时iRom中的代码（ BL0, 由三星固化，不能修改，别人能不能改不一定闭嘴） 会根据OM引脚配置选择一种启动方式， 主要用到sd卡启动</p>
         
     
     <time datetime="2016-03-30T05:00:42.000Z" itemprop="datePublished">2016-03-30</time>
@@ -95,10 +96,10 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 <div id="authorInfo">
 	
@@ -126,7 +127,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -159,7 +160,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -171,31 +172,11 @@
 			
 		
 			
-				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/内存管理/" title="内存管理">内存管理<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/TCP-IP/" title="TCP/IP">TCP/IP<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+				<li><a href="/tags/网络/" title="网络">网络<sup>1</sup></a></li>
 			
 		
 			
@@ -203,11 +184,15 @@
 			
 		
 			
+				<li><a href="/tags/Uboot/" title="Uboot">Uboot<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/域名/" title="域名">域名<sup>1</sup></a></li>
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
 			
 		
 			
@@ -219,7 +204,23 @@
 			
 		
 			
-				<li><a href="/tags/网络/" title="网络">网络<sup>1</sup></a></li>
+				<li><a href="/tags/HTTPS/" title="HTTPS">HTTPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ARC/" title="ARC">ARC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/内存管理/" title="内存管理">内存管理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/域名/" title="域名">域名<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -335,7 +336,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
